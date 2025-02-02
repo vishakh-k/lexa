@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { LogoFull } from "../../assets/images/Logo";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -99,28 +100,9 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Updated Logo with premium fonts */}
-          <div className="flex-shrink-0 flex items-center space-x-3">
-            <div className="relative w-10 h-10">
-              <svg
-                className="w-full h-full text-lexa-600 dark:text-lexa-400"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M11 19v-5.5H8V19h3zm3 0v-5.5h-2V19h2zm3 0v-5.5h-2V19h2zM8 12.5V7H6v5.5h2zm3 0V7H9v5.5h2zm3 0V7h-2v5.5h2zm3 0V7h-2v5.5h2z" />
-                <path d="M19 20H5V4h14v16zM5 2C3.9 2 3 2.9 3 4v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H5z" />
-              </svg>
-              <div className="absolute top-1 right-1 w-2 h-2 bg-lexa-400 dark:bg-lexa-300 rounded-full animate-pulse"></div>
-              <div className="absolute bottom-1 left-1 w-2 h-2 bg-lexa-400 dark:bg-lexa-300 rounded-full animate-pulse"></div>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold text-lexa-800 dark:text-lexa-100 font-accent tracking-wider">
-                LEXA
-              </span>
-              <span className="text-xs text-lexa-600 dark:text-lexa-400 font-heading tracking-widest uppercase">
-                Premium Bottles
-              </span>
-            </div>
+          {/* Logo Section */}
+          <div className="flex-shrink-0">
+            <LogoFull className="h-12 w-auto" />
           </div>
 
           {/* Desktop Navigation with updated fonts */}
