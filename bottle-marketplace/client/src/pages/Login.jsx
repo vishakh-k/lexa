@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoFull } from "../assets/images/Logo";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,11 +19,10 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Add your authentication logic here
-      console.log("Login attempt:", formData);
+      await login(formData.email, formData.password);
       navigate("/profile");
     } catch (err) {
-      setError("Invalid email or password");
+      setError(err.response?.data?.error || "Invalid email or password");
     } finally {
       setIsLoading(false);
     }

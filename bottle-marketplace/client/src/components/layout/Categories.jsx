@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { images } from "../../assets";
 
 const Categories = () => {
   const categories = [
@@ -7,87 +8,66 @@ const Categories = () => {
       id: "sports",
       name: "Sports Bottles",
       description: "Perfect for athletes and active lifestyles",
-      image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8",
+      image: images.bottle2,
       count: 24,
     },
     {
       id: "travel",
       name: "Travel Bottles",
       description: "Ideal for adventures and daily commute",
-      image: "https://images.unsplash.com/photo-1602143407151-7111542de6e9",
+      image: images.bottle3,
       count: 18,
     },
     {
       id: "kids",
       name: "Kids Bottles",
       description: "Safe and fun bottles for children",
-      image: "https://images.unsplash.com/photo-1602143407151-7111542de6e7",
+      image: images.bottle6,
       count: 12,
     },
     {
       id: "premium",
       name: "Premium Collection",
       description: "Luxury bottles with superior quality",
-      image: "https://images.unsplash.com/photo-1602143407151-7111542de6e6",
+      image: images.bottle5,
       count: 15,
     },
   ];
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Shop by Category
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
-            Find the perfect bottle for your lifestyle
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              to={`/category/${category.id}`}
-              className="group"
-            >
-              <div className="relative overflow-hidden rounded-lg shadow-lg">
-                {/* Image */}
-                <div className="aspect-w-1 aspect-h-1">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover object-center transform group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {category.name}
-                    </h3>
-                    <p className="text-gray-200 text-sm mb-3">
-                      {category.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-300">
-                        {category.count} Products
-                      </span>
-                      <span className="text-white text-sm font-medium group-hover:underline">
-                        Shop Now →
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+    <div className="bg-gray-50 dark:bg-gray-800">
+    <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+      <div className="text-center">
+        <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+          Shop by Category
+        </h2>
+        <p className="mt-4 text-lg text-gray-500 dark:text-gray-300">
+          Find the perfect bottle for your needs
+        </p>
       </div>
-    </section>
-  );
+
+      <div className="mt-12 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4">
+        {categories.map((category, index) => (
+          <div key={index} className="group relative">
+            <div className="relative w-full h-80 rounded-lg overflow-hidden bg-white dark:bg-gray-700">
+              <img
+                src={category.image}
+                alt={category.name}
+                className="w-full h-full object-center object-cover group-hover:opacity-75 transition duration-300"
+              />
+            </div>
+            <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+              {category.name}
+            </h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">
+              {category.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
 };
 
 export default Categories;

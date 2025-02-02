@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const FeaturedProducts = () => {
   const products = [
@@ -41,111 +42,125 @@ const FeaturedProducts = () => {
     },
   ];
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+    hover: {
+      scale: 1.05,
+      transition: {
+        duration: 0.3,
+      },
+    },
+  };
+
+  const imageVariants = {
+    hover: {
+      scale: 1.1,
+      transition: {
+        duration: 0.3,
+      },
+    },
+  };
+
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+    <div className="bg-white dark:bg-gray-900">
+      <motion.div
+        className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={containerVariants}
+      >
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
             Featured Products
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our most popular water bottles, crafted with premium
-            materials and designed for everyday use.
+          <p className="mt-4 text-lg text-gray-500 dark:text-gray-300">
+            Our most popular selections
           </p>
-        </div>
+        </motion.div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div
+          className="mt-12 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4"
+          variants={containerVariants}
+        >
           {products.map((product) => (
-            <div
+            <motion.div
               key={product.id}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105"
+              className="group relative cursor-pointer"
+              variants={itemVariants}
+              whileHover="hover"
             >
-              {/* Product Image */}
-              <div className="relative h-64 overflow-hidden">
-                <img
+              <div className="relative w-full h-80 rounded-lg overflow-hidden bg-white dark:bg-gray-800">
+                <motion.img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-center object-cover"
+                  variants={imageVariants}
+                  whileHover="hover"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-lexa-600 text-white px-3 py-1 rounded-full text-sm">
-                    {product.category}
-                  </span>
-                </div>
+                <motion.div
+                  className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"
+                  whileHover={{ backgroundColor: "rgba(0,0,0,0.2)" }}
+                />
               </div>
-
-              {/* Product Info */}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {product.name}
-                </h3>
-
-                {/* Rating */}
-                <div className="flex items-center mb-4">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        className={`w-5 h-5 ${
-                          i < Math.floor(product.rating)
-                            ? "text-yellow-400"
-                            : "text-gray-300"
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <span className="text-gray-600 ml-2">
-                    ({product.reviews})
-                  </span>
-                </div>
-
-                {/* Price and Button */}
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-lexa-600">
-                    ${product.price}
-                  </span>
-                  <Link
-                    to={`/product/${product.id}`}
-                    className="bg-lexa-600 text-white px-4 py-2 rounded-full hover:bg-lexa-700 transition duration-300"
+              <motion.div
+                className="mt-4 flex justify-between"
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                    {product.name}
+                  </h3>
+                  <motion.p
+                    className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                    whileHover={{ color: "#4F46E5" }}
                   >
-                    View Details
-                  </Link>
+                    ${product.price}
+                  </motion.p>
                 </div>
-              </div>
-            </div>
+                <motion.div
+                  className="flex items-center"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <span className="text-yellow-400">★</span>
+                  <span className="ml-1 text-sm text-gray-500 dark:text-gray-300">
+                    {product.rating} ({product.reviews})
+                  </span>
+                </motion.div>
+              </motion.div>
+            </motion.div>
           ))}
-        </div>
-
-        {/* View All Button */}
-        <div className="text-center mt-12">
-          <Link
-            to="/shop"
-            className="inline-flex items-center space-x-2 bg-lexa-600 text-white px-8 py-3 rounded-full hover:bg-lexa-700 transition duration-300"
-          >
-            <span>View All Products</span>
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </Link>
-        </div>
-      </div>
-    </section>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 };
 

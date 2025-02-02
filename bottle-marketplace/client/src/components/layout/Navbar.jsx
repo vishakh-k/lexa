@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import { LogoFull } from "../../assets/images/Logo";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleDarkMode = (e) => {
-    e.preventDefault(); // Prevent default button behavior
+    e.preventDefault();
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   const navItems = [
@@ -102,15 +111,17 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
           <div className="flex-shrink-0">
-            <LogoFull className="h-12 w-auto" />
+            <Link to="/">
+              <LogoFull className="h-12 w-auto" />
+            </Link>
           </div>
 
-          {/* Desktop Navigation with updated fonts */}
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-12">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.path}
+                to={item.path}
                 className="group flex items-center space-x-2 text-gray-700 dark:text-gray-200 relative py-2 font-heading"
               >
                 <span className="transform group-hover:scale-110 transition-transform duration-200">
@@ -120,11 +131,11 @@ const Navbar = () => {
                   {item.name}
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-lexa-600 dark:bg-lexa-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
 
-          {/* Desktop Buttons with updated fonts */}
+          {/* Desktop Buttons */}
           <div className="hidden md:flex items-center space-x-6">
             <button
               onClick={toggleDarkMode}
@@ -161,18 +172,71 @@ const Navbar = () => {
                 </svg>
               )}
             </button>
-            <a
-              href="/login"
-              className="px-4 py-2 text-lexa-600 hover:text-lexa-700 dark:text-lexa-400 font-heading font-medium hover:bg-lexa-50 dark:hover:bg-gray-800 rounded-full transition duration-300"
-            >
-              Login
-            </a>
-            <a
-              href="/signup"
-              className="px-6 py-2 bg-lexa-600 text-white rounded-full hover:bg-lexa-700 transition duration-300 font-heading font-medium"
-            >
-              Sign Up
-            </a>
+
+            {user ? (
+              <div className="relative group">
+                <button className="flex items-center space-x-2 text-gray-700 dark:text-gray-200">
+                  <span className="font-heading font-medium">{user.name}</span>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                <div className="absolute right-0 w-48 mt-2 py-2 bg-white dark:bg-gray-800 rounded-md shadow-xl hidden group-hover:block">
+                  {user.role === "admin" && (
+                    <Link
+                      to="/admin/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-lexa-50 dark:hover:bg-gray-700"
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-lexa-50 dark:hover:bg-gray-700"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/orders"
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-lexa-50 dark:hover:bg-gray-700"
+                  >
+                    My Orders
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-lexa-50 dark:hover:bg-gray-700"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 py-2 text-lexa-600 hover:text-lexa-700 dark:text-lexa-400 font-heading font-medium hover:bg-lexa-50 dark:hover:bg-gray-800 rounded-full transition duration-300"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-6 py-2 bg-lexa-600 text-white rounded-full hover:bg-lexa-700 transition duration-300 font-heading font-medium"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -182,40 +246,11 @@ const Navbar = () => {
               className="p-2 rounded-full hover:bg-lexa-200 dark:hover:bg-gray-700"
               aria-label="Toggle dark mode"
             >
-              {isDarkMode ? (
-                <svg
-                  className="w-6 h-6 text-yellow-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-6 h-6 text-gray-700"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                  />
-                </svg>
-              )}
+              {/* Dark mode icon (same as desktop) */}
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-md text-gray-700 hover:text-lexa-800 dark:text-gray-200 hover:bg-lexa-100 dark:hover:bg-gray-700 focus:outline-none"
-              aria-label="Toggle menu"
             >
               <svg
                 className="h-6 w-6"
@@ -247,54 +282,107 @@ const Navbar = () => {
         <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.path}
-                className="flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-lexa-800 hover:bg-lexa-100 dark:text-gray-200 dark:hover:bg-gray-700 transition duration-150"
+                to={item.path}
+                className="flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-lexa-800 hover:bg-lexa-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.icon}
                 <span className="font-heading">{item.name}</span>
-              </a>
+              </Link>
             ))}
-            <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-            <a
-              href="/login"
-              className="flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-lexa-600 hover:text-lexa-800 dark:text-lexa-400"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                />
-              </svg>
-              <span className="font-heading">Login</span>
-            </a>
-            <a
-              href="/signup"
-              className="flex items-center space-x-3 px-3 py-2 rounded-full bg-lexa-600 text-white hover:bg-lexa-700 transition duration-150 justify-center mt-2 mb-2"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                />
-              </svg>
-              <span className="font-heading">Sign Up</span>
-            </a>
+
+            {user ? (
+              <>
+                <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                {user.role === "admin" && (
+                  <Link
+                    to="/admin/dashboard"
+                    className="flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-lexa-800 hover:bg-lexa-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                      />
+                    </svg>
+                    <span className="font-heading">Admin Dashboard</span>
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-800 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  <span className="font-heading">Logout</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                <Link
+                  to="/login"
+                  className="flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-lexa-600 hover:text-lexa-800 dark:text-lexa-400"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  <span className="font-heading">Login</span>
+                </Link>
+                <Link
+                  to="/signup"
+                  className="flex items-center space-x-3 px-3 py-2 rounded-full bg-lexa-600 text-white hover:bg-lexa-700 transition duration-150 justify-center mt-2 mb-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                    />
+                  </svg>
+                  <span className="font-heading">Sign Up</span>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

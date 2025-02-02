@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion"; // Add animation if you want
 
 const Benefits = () => {
   const features = [
@@ -88,14 +89,14 @@ const Benefits = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Why Choose Our Bottles?
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Experience the perfect blend of style, functionality, and
             sustainability
           </p>
@@ -106,22 +107,24 @@ const Benefits = () => {
           {features.map((feature) => (
             <div
               key={feature.id}
-              className="bg-white rounded-xl p-8 text-center shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="bg-white dark:bg-gray-800 rounded-xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 dark:shadow-gray-700/30"
             >
               {/* Icon */}
               <div className="flex justify-center mb-6">
-                <div className="text-lexa-600 p-3 bg-lexa-50 rounded-full">
+                <div className="text-lexa-600 dark:text-lexa-400 p-3 bg-lexa-50 dark:bg-lexa-900/50 rounded-full">
                   {feature.icon}
                 </div>
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                 {feature.title}
               </h3>
 
               {/* Description */}
-              <p className="text-gray-600">{feature.description}</p>
+              <p className="text-gray-600 dark:text-gray-300">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
@@ -135,10 +138,12 @@ const Benefits = () => {
             { number: "30Day", label: "Money Back Guarantee" },
           ].map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-3xl font-bold text-lexa-600">
+              <div className="text-3xl font-bold text-lexa-600 dark:text-lexa-400">
                 {stat.number}
               </div>
-              <div className="text-gray-600 mt-2">{stat.label}</div>
+              <div className="text-gray-600 dark:text-gray-300 mt-2">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>

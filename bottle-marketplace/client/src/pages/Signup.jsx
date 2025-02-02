@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoFull } from "../assets/images/Logo";
+import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { signup } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,11 +27,10 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      // Add your registration logic here
-      console.log("Signup attempt:", formData);
+      await signup(formData.name, formData.email, formData.password);
       navigate("/login");
     } catch (err) {
-      setError("Failed to create account");
+      setError(err.response?.data?.error || "Failed to create account");
     } finally {
       setIsLoading(false);
     }
